@@ -17,11 +17,13 @@ def read_signal(s):
     for l in lines:
         line = l.strip().replace(",","")
         if (line.startswith("input") or line.startswith("output")):
-            sig_type = "input" if line.startswith("input") else "output"
+            sig_type = "input " if line.startswith("input") else "output"
             sig_vector_res = re.findall(r"\[\d+:\d+\]",line)
             sig_vector = ""
             if len(sig_vector_res) == 1:
                 sig_vector = sig_vector_res[0]
+            if len(sig_vector) < 6:
+                sig_vector = (6 - len(sig_vector))*" " + sig_vector
             sig_name_res = re.findall(r"\w+",line)
             if len(sig_name_res) == 0:
                 continue
@@ -45,8 +47,8 @@ def get_wrapped_inst(signal,module_name="orig_mod",inst_name="orig_mod_inst"):
     return buf
 
 def get_wrapped_module(signal,module_name="new_module"):
-    buf = "module {}(".format(module_name)
-    buf += ",\n".join(x["new_name"] for x in signal)
+    buf = "module {}(\n".format(module_name)
+    buf += ",\n".join("    {} {} {}".format(x["type"],x["vector"],x["new_name"]) for x in signal)
     buf += "\n);\n\n"
     buf += get_wrapped_inst(signal)
     buf += "\n\nendmodule"
