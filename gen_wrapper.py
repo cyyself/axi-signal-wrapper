@@ -5,7 +5,7 @@ def axi_signal_filter(x):
     if x.__contains__("axi4"):
         y = x.replace("_bits_","")
         for ch in axi_channels:
-            y = y.replace(ch+"_","")
+            y = y.replace(ch+"_",ch)
         return y
     else:
         return x
