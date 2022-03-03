@@ -1,9 +1,10 @@
+#!/usr/bin/env python3
 import re
 
 def axi_signal_filter(x):
     axi_channels = {"aw","w","b","ar","r"}
     if x.__contains__("axi4"):
-        y = x.replace("_bits_","")
+        y = x.replace("_bits","")
         for ch in axi_channels:
             y = y.replace(ch+"_",ch)
         return y
